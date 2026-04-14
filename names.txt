@@ -1,0 +1,6 @@
+1.git=to check git was there
+2.git status
+3.git add .=to add all things we did
+4.git add names.txt = to add specific file
+5.git commit= to commit the changes
+6.git commit -m "message is here"= commit with given message
