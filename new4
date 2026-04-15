@@ -1,0 +1,179 @@
+✅ Set A: System Administration & Maintenance
+🔹 1) Timestamped Backup Script
+#!/bin/bash
+
+SOURCE="/home/user/data"
+DESTINATION="/backup"
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+
+mkdir -p $DESTINATION/$DATE
+cp -r $SOURCE $DESTINATION/$DATE
+
+echo "Backup completed successfully on $DATE"
+✔ Explanation:
+SOURCE → folder to backup
+DESTINATION → where backup is stored
+DATE → creates unique folder (prevents overwrite)
+mkdir -p → creates directory safely
+cp -r → copies all files recursively
+echo → success message
+🔹 2) Disk Usage Monitor Script
+#!/bin/bash
+
+THRESHOLD=80
+
+df -H | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{print $5 " " $1}' | while read output;
+do
+    usage=$(echo $output | awk '{print $1}' | cut -d'%' -f1)
+    partition=$(echo $output | awk '{print $2}')
+
+    if [ $usage -ge $THRESHOLD ]; then
+        echo "⚠ Warning: Disk usage on $partition is at ${usage}%"
+    fi
+done
+✔ Explanation:
+df -H → disk usage
+grep -vE → removes unwanted lines
+awk → extracts columns
+while read → loop through each partition
+cut → removes %
+condition checks if usage ≥ 80%
+🔹 3) Jenkins Service Watchdog
+#!/bin/bash
+
+SERVICE="jenkins"
+
+if systemctl is-active --quiet $SERVICE
+then
+    echo "$SERVICE is running"
+else
+    echo "$SERVICE is not running. Starting service..."
+    systemctl start $SERVICE
+
+    if systemctl is-active --quiet $SERVICE
+    then
+        echo "$SERVICE started successfully"
+    else
+        echo "Failed to start $SERVICE"
+    fi
+fi
+✔ Explanation:
+systemctl is-active --quiet → checks service silently
+systemctl start → starts service
+nested if → confirms restart
+✅ Set B: Networking & Logging
+🔹 4) Host Reachability Script
+#!/bin/bash
+
+HOST="google.com"
+OUTPUT_FILE="ping_results.log"
+
+if ping -c 1 $HOST &> /dev/null
+then
+    echo "$(date): $HOST is reachable" >> $OUTPUT_FILE
+else
+    echo "$(date): $HOST is not reachable" >> $OUTPUT_FILE
+fi
+✔ Explanation:
+ping -c 1 → send 1 packet
+&> /dev/null → hide output
+>> → append log
+date → adds timestamp
+🔹 5) Database Backup Script
+#!/bin/bash
+
+DB_NAME="school"
+BACKUP_DIR="/backups"
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+
+mkdir -p $BACKUP_DIR
+
+echo "Enter MySQL password:"
+read -s PASSWORD
+
+mysqldump -u root -p$PASSWORD $DB_NAME > $BACKUP_DIR/$DB_NAME-$DATE.sql
+
+echo "Database backup completed: $BACKUP_DIR/$DB_NAME-$DATE.sql"
+✔ Explanation:
+read -s → hides password input
+mysqldump → exports database
+file saved with timestamp
+🔹 6) Uptime Logging Script
+#!/bin/bash
+
+LOG_FILE="system_uptime.log"
+
+echo "$(date): $(uptime -p)" >> $LOG_FILE
+✔ Explanation:
+uptime -p → human-readable uptime
+>> → appends data
+timestamp included
+🔹 7) Display Listening Ports
+netstat -tuln | grep LISTEN
+
+👉 OR (with process names):
+
+netstat -tulpn | grep LISTEN
+✔ Explanation:
+-t → TCP
+-u → UDP
+-l → listening
+-p → process info
+-n → numeric format
+✅ Set C: Optimization & Performance
+🔹 8) System Cleanup Script
+#!/bin/bash
+
+echo "Updating package list..."
+sudo apt-get update
+
+echo "Upgrading packages..."
+sudo apt-get upgrade -y
+
+echo "Removing unnecessary packages..."
+sudo apt-get autoremove -y
+
+echo "Cleaning cache..."
+sudo apt-get clean
+
+echo "System packages updated and cleaned successfully"
+✔ Explanation:
+update → refresh repo
+upgrade → install updates
+autoremove → remove unused packages
+clean → clear cache
+🔹 9) Web Response Time Script
+#!/bin/bash
+
+URLS=("https://example.com" "https://google.com")
+
+for URL in "${URLS[@]}"
+do
+    RESPONSE_TIME=$(curl -o /dev/null -s -w '%{time_total}' $URL)
+    echo "Response time for $URL: $RESPONSE_TIME seconds"
+done
+✔ Explanation:
+array stores URLs
+curl -w '%{time_total}' → measures time
+-s → silent mode
+🔹 10) Top 10 Memory Consuming Processes
+ps aux --sort=-%mem | head -n 10
+✔ Explanation:
+ps aux → all processes
+--sort=-%mem → highest memory first
+head -n 10 → top 10
+✅ 🔥 Script Creation & Execution (IMPORTANT for exam)
+📝 Create Script:
+nano script.sh
+
+OR
+
+vi script.sh
+▶ Make Executable:
+chmod +x script.sh
+▶ Run Script:
+./script.sh
+
+OR
+
+bash script.sh
