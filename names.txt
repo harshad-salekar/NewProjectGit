@@ -1,6 +1,24 @@
 1.git=to check git was there
+git init command for starting project
 2.git status
 3.git add .=to add all things we did
 4.git add names.txt = to add specific file
 5.git commit= to commit the changes
 6.git commit -m "message is here"= commit with given message
+7.git log
+8.git reset idno
+9.git stash = save changes but not commit save in another location
+10.git stash pop=to get that changes from another location
+11.git add .
+12.git stash
+13.git stash clear=to delete that stash
+14.git remote add origin url
+15.git clone url
+16.git remote add upstream url=pull request
+17.git branch branchname=create a new branch for commit some changes bcoz never commit on main branch
+18.git checkout branchname= to get head pointer to new branch
+19.git push origin branchname=to push commit
+
+20.after reseting that version is gone to stash we need to git add. and git  stash clear
+
+21.git push origin branchname -f=force push
