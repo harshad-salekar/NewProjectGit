@@ -1,0 +1,120 @@
+1) Mongo-Express Application (Manual using Docker commands)
+🔹 Step 0: Create Custom Network
+
+Command:
+
+docker network create mongo-network
+
+Description:
+Creates a custom Docker network so containers can communicate securely using names instead of IPs.
+
+🔹 A. Run MongoDB Container
+
+Command:
+
+docker run -d \
+--name mongodb \
+--network mongo-network \
+-p 27017:27017 \
+-e MONGO_INITDB_ROOT_USERNAME=admin \
+-e MONGO_INITDB_ROOT_PASSWORD=admin \
+mongo
+
+Description:
+
+Runs MongoDB container in detached mode
+Sets username & password for security
+Maps port 27017 (database access)
+Connects to custom network mongo-network
+🔹 B. Run Mongo-Express Container
+
+Command:
+
+docker run -d \
+--name mongo-express \
+--network mongo-network \
+-p 8081:8081 \
+-e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \
+-e ME_CONFIG_MONGODB_ADMINPASSWORD=admin \
+-e ME_CONFIG_MONGODB_SERVER=mongodb \
+mongo-express
+
+Description:
+
+Runs Mongo-Express GUI container
+Connects to same network (mongo-network)
+Uses container name mongodb as server
+Maps port 8081 for browser access
+🌐 Access in Browser:
+http://localhost:8081
+
+👉 This works because:
+
+Both containers are on same network
+Mongo-Express connects using container name (mongodb)
+Port 8081 is exposed to host
+✅ 2) Mongo-Express Application (Using Docker Compose)
+🔹 docker-compose.yml
+
+Create a file named docker-compose.yml
+
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    depends_on:
+      - mongodb
+🔹 Run Compose
+
+Command:
+
+docker-compose up -d
+
+Description:
+
+Starts both MongoDB and Mongo-Express together
+Automatically creates a default network
+Handles dependency (Mongo starts first)
+🌐 Access Application:
+http://localhost:8081
+🔥 Key Concepts (Important for Viva)
+🔹 Networking
+Custom network → containers communicate using names
+No need to use IP addresses
+🔹 Environment Variables
+Used to configure database credentials securely
+🔹 Port Mapping
+host_port:container_port
+Example: 8081:8081
+🔹 Docker Compose Benefits
+One file for entire setup
+Easy to share & reuse
+One command deployment
+💡 Extra (Best Practice - Volume)
+
+If examiner asks, add volume:
+
+volumes:
+  - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+
+👉 Prevents data loss when container stops.
