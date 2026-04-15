@@ -1,0 +1,196 @@
+✅ Set A: Docker Image and Container Lifecycle
+A. Pull Ubuntu 20.04 image
+
+Command:
+
+docker pull ubuntu:20.04
+
+Description:
+Downloads the Ubuntu image with version 20.04 from Docker Hub to your local system.
+
+B. List all available images
+
+Command:
+
+docker images
+
+Description:
+Displays all Docker images stored locally, including repository, tag, image ID, and size.
+
+C. Pull Ubuntu latest image
+
+Command:
+
+docker pull ubuntu:latest
+
+Description:
+Downloads the latest version of the Ubuntu image.
+
+D. Remove Ubuntu 20.04 image
+
+Command:
+
+docker rmi ubuntu:20.04
+
+Description:
+Deletes the Ubuntu 20.04 image from your local system to free space.
+
+E. Run container (ubuntu-os) in detached + interactive mode
+
+Command:
+
+docker run -dit --name ubuntu-os ubuntu:latest
+
+Description:
+Creates and runs a container named ubuntu-os in detached mode with interactive terminal enabled.
+
+F. Stop the container
+
+Command:
+
+docker stop ubuntu-os
+
+Description:
+Stops the running container.
+
+G. Restart the container
+
+Command:
+
+docker restart ubuntu-os
+
+Description:
+Restarts the stopped container.
+
+H. List all containers
+
+Command:
+
+docker ps -a
+
+Description:
+Shows all containers (running + stopped).
+
+I. Create directory inside container
+
+Command:
+
+docker exec ubuntu-os mkdir /myfolder
+
+Description:
+Creates a directory named myfolder inside the running container.
+
+J. Verify directory
+
+Command:
+
+docker exec ubuntu-os ls /
+
+Description:
+Lists root directory contents to check if myfolder exists.
+
+K. Stop container again
+
+Command:
+
+docker stop ubuntu-os
+
+Description:
+Stops the container safely.
+
+L. Prune all containers
+
+Command:
+
+docker container prune
+
+Description:
+Deletes all stopped containers to free resources.
+
+✅ Set B: PostgreSQL Containerization
+A. Pull PostgreSQL image
+
+Command:
+
+docker pull postgres:latest
+
+Description:
+Downloads the latest PostgreSQL image.
+
+B. Run PostgreSQL container
+
+Command:
+
+docker run -dit --name postgres-user1 -e POSTGRES_PASSWORD=admin postgres
+
+Description:
+Starts a PostgreSQL container with password admin in detached mode.
+
+C. Connect to PostgreSQL CLI
+
+Command:
+
+docker exec -it postgres-user1 psql -U postgres
+
+Description:
+Opens PostgreSQL command line inside the container.
+
+D. Create database
+
+Command:
+
+CREATE DATABASE mydb;
+
+Description:
+Creates a new database named mydb inside PostgreSQL.
+
+E. Stop PostgreSQL container
+
+Command:
+
+docker stop postgres-user1
+
+Description:
+Stops the database container.
+
+F. Delete container
+
+Command:
+
+docker rm postgres-user1
+
+Description:
+Removes the container permanently.
+
+✅ Set C: Custom Image + Dockerfile
+3) Dockerfile for Node.js App
+
+Create a file named Dockerfile:
+
+FROM node:18
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["node", "app.js"]
+
+Description:
+Defines a Node.js environment, installs dependencies, and runs the app.
+
+Build Image
+docker build -t my-node-app .
+Run Container
+docker run -dit -p 3000:3000 my-node-app
+✅ 4) Push Image to Docker Hub
+A. Tag Image
+docker tag my-node-app username/my-node-app
+B. Login to Docker Hub
+docker login
+C. Push Image
+docker push username/my-node-app
+
